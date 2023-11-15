@@ -5,7 +5,7 @@ import rospy
 from ros_tcp_endpoint import TcpServer, RosPublisher, RosSubscriber, RosService
 from ur3_moveit.msg import *
 from ur3_moveit.srv import *
-
+from ur3_moveit.msg import UR3MoveitJoints as URMoveitJoints
 def main():
     ros_node_name = rospy.get_param("/TCP_NODE_NAME", 'TCPServer')
     tcp_server = TcpServer(ros_node_name)
@@ -15,7 +15,8 @@ def main():
     tcp_server.start({
         'UR3Trajectory': RosSubscriber('UR3Trajectory', UR3Trajectory, tcp_server),
         'ur3_moveit': RosService('ur3_moveit', MoverService),
-        'pose_estimation_srv': RosService('pose_estimation_service', PoseEstimationService)
+        'pose_estimation_srv': RosService('pose_estimation_service', PoseEstimationService),
+        'ur3_joints':RosSubscriber('ur3_joints', URMoveitJoints, tcp_server),
     })
 
     rospy.spin()
